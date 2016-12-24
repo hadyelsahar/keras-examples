@@ -127,7 +127,7 @@ for word, index in index_dict.items():
 
 model = Sequential()
 model.add(Embedding(TOP_WORDS + 1, word_vectors.vector_size, input_length=MAX_SEQ_LENGTH, weights=[embedding_weights]))
-model.add(LSTM(100))
+model.add(LSTM(100, consume_less='gpu'))
 model.add(Dropout(0.2))
 model.add(Dense(1, activation='relu'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -152,7 +152,7 @@ for word, index in index_dict.items():
 
 model = Sequential()
 model.add(Embedding(TOP_WORDS + 1, word_vectors.vector_size, input_length=MAX_SEQ_LENGTH, weights=[embedding_weights]))
-model.add(LSTM(100))
+model.add(LSTM(100, consume_less='gpu'))
 # model.add(Dropout(0.2))
 model.add(Dense(1, activation='relu'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
