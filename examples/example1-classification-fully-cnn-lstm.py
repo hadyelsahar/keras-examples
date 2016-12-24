@@ -38,11 +38,11 @@ model.add(Dense(12, input_dim=8, init='uniform', activation='relu'))
 model.add(Dense(8, init='uniform', activation='relu'))
 model.add(Dense(1, init='uniform', activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer=SGD(lr=0.01, momentum=0.9, nesterov=True), metrics=['accuracy'])
-print(model.summary())
+# print(model.summary())
 
 model.fit(X_train, y_train, batch_size=32, nb_epoch=N_EPOCHS)
 scores = model.evaluate(X_test, y_test, batch_size=32)
-print("Accuracy: %.2f%%" % (scores[1]*100))
+print("Model1: One layer NN: Accuracy: %.2f%%" % (scores[1]*100))
 
 #################
 # model2 : LSTM #
@@ -55,19 +55,19 @@ print("Accuracy: %.2f%%" % (scores[1]*100))
 # create the model
 model = Sequential()
 model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
-model.add(LSTM(100))
+model.add(LSTM(100, consume_less='gpu'))
 model.add(Dense(1, activation='relu'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-print(model.summary())
+# print(model.summary())
 
 model.fit(X_train, y_train, nb_epoch=N_EPOCHS, batch_size=64)
 # Final evaluation of the model
 scores = model.evaluate(X_test, y_test)
-print("Accuracy: %.2f%%" % (scores[1]*100))
+print("Model2: LSTM: Accuracy: %.2f%%" % (scores[1]*100))
 
-# ######################
-# # model3: CNN + LSTM #
-# ######################
+######################
+# model3: CNN + LSTM #
+######################
 EMB_VEC_LENGTH = 32
 model = Sequential()
 model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
@@ -75,14 +75,15 @@ model.add(Conv1D(nb_filter=32, filter_length=3, activation='relu', border_mode='
 model.add(MaxPooling1D(pool_length=2))
 model.add(Dropout(0.2))
 model.add(LSTM(100))
+model.add(Dropout(0.2))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-print model.summary()
+# print model.summary()
 model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
-print("Accuracy: %.2f%%" % (scores[1]*100))
+print("Model3: CNN+ LSTM + DROPOUT: Accuracy: %.2f%%" % (scores[1]*100))
 
 #################################
 # model3: CNN + LSTM + Word2vec #
@@ -102,14 +103,15 @@ model.add(Conv1D(nb_filter=32, filter_length=3, activation='relu', border_mode='
 model.add(MaxPooling1D(pool_length=2))
 model.add(Dropout(0.2))
 model.add(LSTM(100))
+model.add(Dropout(0.2))
 model.add(Dense(1, activation='relu'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-print model.summary()
+# print model.summary()
 model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
-print("Accuracy: %.2f%%" % (scores[1]*100))
+print("Model4: CNN + LSTM + Word2Vec: Accuracy: %.2f%%" % (scores[1]*100))
 
 #################################
 # model4: LSTM + Word2vec #
@@ -130,11 +132,11 @@ model.add(Dropout(0.2))
 model.add(Dense(1, activation='relu'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-print model.summary()
+# print model.summary()
 model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
-print("Accuracy: %.2f%%" % (scores[1]*100))
+print("Model4: LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
 
 #################################
 # model5: BidirectionalLSTM + Word2vec #
@@ -155,9 +157,8 @@ model.add(LSTM(100))
 model.add(Dense(1, activation='relu'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-print model.summary()
+# print model.summary()
 model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
-print("Accuracy: %.2f%%" % (scores[1]*100))
-
+print("MODEL5: BIDIRECTION LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
