@@ -37,7 +37,7 @@ model.add(Dense(output_dim=64, input_dim=MAX_SEQ_LENGTH))
 model.add(Dense(12, input_dim=8, init='uniform', activation='relu'))
 model.add(Dense(8, init='uniform', activation='relu'))
 model.add(Dense(1, init='uniform', activation='sigmoid'))
-model.compile(loss='binary_crossentropy', optimizer=SGD(lr=0.01, momentum=0.9, nesterov=True))
+model.compile(loss='binary_crossentropy', optimizer=SGD(lr=0.01, momentum=0.9, nesterov=True), metrics=['accuracy'])
 print(model.summary())
 
 model.fit(X_train, y_train, batch_size=32, nb_epoch=N_EPOCHS)
