@@ -42,7 +42,7 @@ model.compile(loss='binary_crossentropy', optimizer=SGD(lr=0.01, momentum=0.9, n
 
 model.fit(X_train, y_train, batch_size=32, nb_epoch=N_EPOCHS)
 scores = model.evaluate(X_test, y_test, batch_size=32)
-print("Model1: One layer NN: Accuracy: %.2f%%" % (scores[1]*100))
+print("\n Model1: One layer NN: Accuracy: %.2f%%" % (scores[1]*100))
 
 #################
 # model2 : LSTM #
@@ -63,7 +63,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.fit(X_train, y_train, nb_epoch=N_EPOCHS, batch_size=64)
 # Final evaluation of the model
 scores = model.evaluate(X_test, y_test)
-print("Model2: LSTM: Accuracy: %.2f%%" % (scores[1]*100))
+print("\n Model2: LSTM: Accuracy: %.2f%%" % (scores[1]*100))
 
 ######################
 # model3: CNN + LSTM #
@@ -83,13 +83,13 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
-print("Model3: CNN+ LSTM + DROPOUT: Accuracy: %.2f%%" % (scores[1]*100))
+print("\n Model3: CNN+ LSTM + DROPOUT: Accuracy: %.2f%%" % (scores[1]*100))
 
 #################################
 # model3: CNN + LSTM + Word2vec #
 #################################
 
-word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True)
+word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True,  unicode_errors='ignore')
 index_dict = imdb.get_word_index()
 
 embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
@@ -111,13 +111,13 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
-print("Model4: CNN + LSTM + Word2Vec: Accuracy: %.2f%%" % (scores[1]*100))
+print("\n Model4: CNN + LSTM + Word2Vec: Accuracy: %.2f%%" % (scores[1]*100))
 
 #################################
 # model4: LSTM + Word2vec #
 #################################
 
-word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True)
+word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True,  unicode_errors='ignore')
 index_dict = imdb.get_word_index()
 
 embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
@@ -136,13 +136,13 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
-print("Model4: LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
+print("\n Model4: LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
 
 #################################
 # model5: BidirectionalLSTM + Word2vec #
 #################################
 
-word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True)
+word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True,  unicode_errors='ignore')
 index_dict = imdb.get_word_index()
 
 embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
@@ -161,4 +161,4 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
-print("MODEL5: BIDIRECTION LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
+print("\n MODEL5: BIDIRECTION LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
