@@ -21,7 +21,7 @@ MAX_SEQ_LENGTH = 500
 EMB_VEC_LENGTH = 150
 N_EPOCHS = 10
 
-_W2V_BINARY_PATH = path.dirname(path.abspath(__file__)) + "../data/wordvectors/GoogleNews-vectors-negative300.bin.gz"
+_W2V_BINARY_PATH = path.dirname(path.abspath(__file__)) + "/../data/wordvectors/GoogleNews-vectors-negative300.bin.gz"
 word_vectors = Word2Vec.load_word2vec_format(_W2V_BINARY_PATH, binary=True)
 
 (X_train, y_train), (X_test, y_test) = imdb.load_data(nb_words=TOP_WORDS)
