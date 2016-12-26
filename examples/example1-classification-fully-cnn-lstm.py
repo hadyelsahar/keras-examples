@@ -5,9 +5,8 @@ from keras.layers import Dense, Activation, LSTM, Conv1D, MaxPooling1D, Dropout
 from keras.layers.embeddings import Embedding
 from keras.preprocessing import sequence
 from keras.optimizers import SGD
-from gensim.models.word2vec import Word2Vec
-
-
+from gensim.models import Word2Vec
+from os import path
 
 # fix random seed for reproducibility
 np.random.seed(7)
@@ -22,6 +21,8 @@ MAX_SEQ_LENGTH = 500
 EMB_VEC_LENGTH = 150
 N_EPOCHS = 10
 
+_W2V_BINARY_PATH = path.dirname(path.abspath(__file__)) + "../data/wordvectors/GoogleNews-vectors-negative300.bin.gz"
+word_vectors = Word2Vec.load_word2vec_format(_W2V_BINARY_PATH, binary=True)
 
 (X_train, y_train), (X_test, y_test) = imdb.load_data(nb_words=TOP_WORDS)
 X_train = sequence.pad_sequences(X_train, maxlen=MAX_SEQ_LENGTH)
@@ -89,10 +90,9 @@ print("\n Model3: CNN+ LSTM + DROPOUT: Accuracy: %.2f%%" % (scores[1]*100))
 # model3: CNN + LSTM + Word2vec #
 #################################
 
-word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True,  unicode_errors='ignore')
 index_dict = imdb.get_word_index()
-
 embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
+
 for word, index in index_dict.items():
     if word in word_vectors and index <= TOP_WORDS:
         embedding_weights[index, :] = word_vectors[word]
@@ -117,7 +117,6 @@ print("\n Model4: CNN + LSTM + Word2Vec: Accuracy: %.2f%%" % (scores[1]*100))
 # model4: LSTM + Word2vec #
 #################################
 
-word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True,  unicode_errors='ignore')
 index_dict = imdb.get_word_index()
 
 embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
@@ -142,7 +141,6 @@ print("\n Model4: LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
 # model5: BidirectionalLSTM + Word2vec #
 #################################
 
-word_vectors = Word2Vec.load_word2vec_format('../data/wordvectors/GoogleNews-vectors-negative300.bin.gz', binary=True,  unicode_errors='ignore')
 index_dict = imdb.get_word_index()
 
 embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
