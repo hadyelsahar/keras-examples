@@ -17,7 +17,7 @@ X = df.sentence.values
 TOP_WORDS = 1000
 MAX_SEQ_LENGTH = 1000
 EMB_VEC_LENGTH = 50
-N_EPOCHS = 10
+N_EPOCHS = 5
 
 tokenizer = Tokenizer(nb_words=TOP_WORDS)
 tokenizer.fit_on_texts(X)
@@ -41,12 +41,13 @@ X_test = sequence.pad_sequences(X_test, maxlen=MAX_SEQ_LENGTH)
 
 model = Sequential()
 model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
-model.add(LSTM(100, consume_less='gpu'))
-model.add(Dense(len(y[0]), activation='tanh'))
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.add(LSTM(100, dropout_U=-0.2, dropout_W=0.2))
+model.add(Dense(len(y[0]), activation='relu'))
+sgd = SGD(lr=0.01, clipnorm=1.)
+model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy', 'fmeasure'])
 print(model.summary())
 
 model.fit(X_train, y_train, nb_epoch=N_EPOCHS, batch_size=64)
 # Final evaluation of the model
 scores = model.evaluate(X_test, y_test)
-print("\n Model2: LSTM: Accuracy: %.2f%%" % (scores[1]*100))
+print("\n Model: LSTM: Accuracy: %.2f%%" % (scores[1]*100))
