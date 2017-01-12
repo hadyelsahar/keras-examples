@@ -5,6 +5,7 @@ from keras.layers import Dense, LSTM
 from keras.layers.embeddings import Embedding
 from sklearn.model_selection import train_test_split
 import pandas as pd
+from keras.optimizers import SGD
 from keras.preprocessing.text import Tokenizer
 from keras.utils import np_utils
 from sklearn.preprocessing import LabelEncoder
@@ -43,7 +44,7 @@ model = Sequential()
 model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
 model.add(LSTM(100, dropout_U=-0.2, dropout_W=0.2))
 model.add(Dense(len(y[0]), activation='relu'))
-sgd = SGD(lr=0.01, clipnorm=1.)
+sgd = sgd(lr=0.01, clipnorm=1.)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy', 'fmeasure'])
 print(model.summary())
 
