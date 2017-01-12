@@ -9,6 +9,7 @@ from keras.optimizers import SGD
 from gensim.models import Word2Vec
 from os import path
 
+
 # fix random seed for reproducibility
 np.random.seed(7)
 
