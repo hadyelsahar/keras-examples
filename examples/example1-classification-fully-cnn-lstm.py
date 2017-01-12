@@ -18,10 +18,11 @@ np.random.seed(7)
 ####################
 # IMDB Sentiment Classification
 # load the dataset but only keep the top n words, zero the rest
-TOP_WORDS = 5000
-MAX_SEQ_LENGTH = 500
-EMB_VEC_LENGTH = 150
+TOP_WORDS = 20000
+MAX_SEQ_LENGTH = 100
+EMB_VEC_LENGTH = 50
 N_EPOCHS = 10
+BATCH_SIZE = 32
 
 _W2V_BINARY_PATH = path.dirname(path.abspath(__file__)) + "/../data/wordvectors/GoogleNews-vectors-negative300.bin.gz"
 word_vectors = Word2Vec.load_word2vec_format(_W2V_BINARY_PATH, binary=True)
@@ -152,13 +153,13 @@ X_test = sequence.pad_sequences(X_test, maxlen=MAX_SEQ_LENGTH)
 
 model = Sequential()
 model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
-model.add(Bidirectional(LSTM(300, consume_less='gpu')))
-model.add(Dropout(0.2))
+model.add(Bidirectional(LSTM(64, consume_less='gpu')))
+model.add(Dropout(0.4))
 model.add(Dense(1, activation='relu'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 print model.summary()
-model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
+model.fit(X_train, y_test, batch_size=BATCH_SIZE, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
 print("\n MODEL5: BIDIRECTION LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
