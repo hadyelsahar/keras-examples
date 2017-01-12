@@ -21,7 +21,7 @@ np.random.seed(7)
 TOP_WORDS = 5000
 MAX_SEQ_LENGTH = 500
 EMB_VEC_LENGTH = 150
-N_EPOCHS = 30
+N_EPOCHS = 10
 
 _W2V_BINARY_PATH = path.dirname(path.abspath(__file__)) + "/../data/wordvectors/GoogleNews-vectors-negative300.bin.gz"
 word_vectors = Word2Vec.load_word2vec_format(_W2V_BINARY_PATH, binary=True)
@@ -54,21 +54,21 @@ X_test = sequence.pad_sequences(X_test, maxlen=MAX_SEQ_LENGTH)
 # more about LSTM :
 # http://deeplearning.net/tutorial/lstm.html
 # http://colah.github.io/posts/2015-08-Understanding-LSTMs/
-
-# create the model
-model = Sequential()
-model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
-model.add(LSTM(100, consume_less='gpu'))
-model.add(Dense(1, activation='relu'))
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-print(model.summary())
-
-model.fit(X_train, y_train, nb_epoch=N_EPOCHS, batch_size=64)
-# Final evaluation of the model
-scores = model.evaluate(X_test, y_test)
-print("\n Model2: LSTM: Accuracy: %.2f%%" % (scores[1]*100))
 #
-# ######################
+# # create the model
+# model = Sequential()
+# model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
+# model.add(LSTM(100, consume_less='gpu'))
+# model.add(Dense(1, activation='relu'))
+# model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+# print(model.summary())
+#
+# model.fit(X_train, y_train, nb_epoch=N_EPOCHS, batch_size=64)
+# # Final evaluation of the model
+# scores = model.evaluate(X_test, y_test)
+# print("\n Model2: LSTM: Accuracy: %.2f%%" % (scores[1]*100))
+#
+######################
 # # model3: CNN + LSTM #
 # ######################
 # EMB_VEC_LENGTH = 32
@@ -119,40 +119,40 @@ print("\n Model2: LSTM: Accuracy: %.2f%%" % (scores[1]*100))
 # model4: LSTM + Word2vec #
 #################################
 
-index_dict = imdb.get_word_index()
+# index_dict = imdb.get_word_index()
+#
+# embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
+# for word, index in index_dict.items():
+#     if word in word_vectors and index <= TOP_WORDS:
+#         embedding_weights[index, :] = word_vectors[word]
+#
+# model = Sequential()
+# model.add(Embedding(TOP_WORDS + 1, word_vectors.vector_size, input_length=MAX_SEQ_LENGTH, weights=[embedding_weights]))
+# model.add(LSTM(100, consume_less='gpu'))
+# model.add(Dropout(0.2))
+# model.add(Dense(1, activation='relu'))
+# model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+#
+# # print model.summary()
+# model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
+#
+# scores = model.evaluate(X_test, y_test)
+# print("\n Model4: LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
 
-embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
-for word, index in index_dict.items():
-    if word in word_vectors and index <= TOP_WORDS:
-        embedding_weights[index, :] = word_vectors[word]
+#############################
+# model5: BidirectionalLSTM #
+#############################
+
+# index_dict = imdb.get_word_index()
+#
+# embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
+# for word, index in index_dict.items():
+#     if word in word_vectors and index <= TOP_WORDS:
+#         embedding_weights[index, :] = word_vectors[word]
 
 model = Sequential()
-model.add(Embedding(TOP_WORDS + 1, word_vectors.vector_size, input_length=MAX_SEQ_LENGTH, weights=[embedding_weights]))
-model.add(LSTM(100, consume_less='gpu'))
-model.add(Dropout(0.2))
-model.add(Dense(1, activation='relu'))
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-# print model.summary()
-model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
-
-scores = model.evaluate(X_test, y_test)
-print("\n Model4: LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
-
-#################################
-# model5: BidirectionalLSTM + Word2vec #
-#################################
-
-index_dict = imdb.get_word_index()
-
-embedding_weights = np.zeros((TOP_WORDS + 1, word_vectors.vector_size))
-for word, index in index_dict.items():
-    if word in word_vectors and index <= TOP_WORDS:
-        embedding_weights[index, :] = word_vectors[word]
-
-model = Sequential()
-model.add(Embedding(TOP_WORDS + 1, word_vectors.vector_size, input_length=MAX_SEQ_LENGTH, weights=[embedding_weights]))
-model.add(Bidirectional(LSTM(100, consume_less='gpu')))
+model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
+model.add(Bidirectional(LSTM(300, consume_less='gpu')))
 model.add(Dropout(0.2))
 model.add(Dense(1, activation='relu'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -162,3 +162,4 @@ model.fit(X_train, y_test, batch_size=64, nb_epoch=N_EPOCHS)
 
 scores = model.evaluate(X_test, y_test)
 print("\n MODEL5: BIDIRECTION LSTM + WORDVECTOR: Accuracy: %.2f%%" % (scores[1]*100))
+
