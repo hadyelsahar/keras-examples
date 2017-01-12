@@ -42,7 +42,7 @@ X_test = sequence.pad_sequences(X_test, maxlen=MAX_SEQ_LENGTH)
 model = Sequential()
 model.add(Embedding(TOP_WORDS, EMB_VEC_LENGTH, input_length=MAX_SEQ_LENGTH))
 model.add(LSTM(100, consume_less='gpu'))
-model.add(Dense(len(y[0]), activation='relu'))
+model.add(Dense(len(y[0]), activation='tanh'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 print(model.summary())
 
